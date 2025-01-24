@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Jersey+15&family=Leckerli+One&display=swap');
+
+
+nav .navbar-brand
+{
+    color: #0b55dd;
+    font-family: "Leckerli One", 'Times New Roman', Times, serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: xx-large;
+}
+
+.fs-1 {
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 500;
+    font-size: xx-large;
+    color: blue;
+}
+
+.indexImages {
+    width: 200px;
+    height: 200px;
+  }
+  

@@ -1,10 +1,11 @@
-from flask import Flask, render_template, request, redirect, flash, session
+import os
 from cs50 import SQL
-from werkzeug.security import generate_password_hash, check_password_hash
+from redis import StrictRedis
 from dotenv import load_dotenv
 from flask_session import Session
-from redis import StrictRedis
-import os
+from helpers import login_required
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask import Flask, render_template, request, redirect, flash, session
 
 
 load_dotenv()
@@ -16,23 +17,34 @@ HOST = os.getenv("REDIS_HOST")
 PORT = os.getenv("REDIS_PORT")
 PASSWORD  = os.getenv("REDIS_PASSWORD")
 
-app.config['SESSION_TYPE'] = 'redis'
-app.config['SESSION_PERMANENT'] = False
-app.config['SESSION_USE_SIGNER'] = True
-app.config['SESSION_REDIS'] = StrictRedis(host=HOST, port=PORT, password=PASSWORD, decode_responses=True)
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 db = SQL("sqlite:///quiz.db")
 
 
 @app.route("/")
-def hello_world():
-    return "<p>Hello, World!</p>"
+@login_required
+def index():
+    return render_template("index.html")
+
+
+@app.route("/quiz", methods=["POST", "GET"])
+@login_required
+def quiz():
+    if request.method == "POST":
+        return render_template("quiz.html")
+
+    else:
+        return render_template("quiz.html")
 
 
 @app.route("/login", methods = ["POST", "GET"])
 def login():
     if request.method == "POST":
+
+        session.clear()
 
         if not request.form.get("username"):
             flash("Username is Required", category="error")
@@ -65,7 +77,7 @@ def logout():
 
     session.clear()
     flash("You have been logged out")
-    redirect("/")
+    return redirect("/")
 
 
 @app.route("/register", methods = ["POST", "GET"])
