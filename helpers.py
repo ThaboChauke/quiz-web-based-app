@@ -9,3 +9,19 @@ def login_required(f):
         return f(*args, **kwargs)
 
     return decorated_function
+
+
+def json_data(db_results):
+    results = []
+
+    for question in db_results:
+        results.append({
+            "id": question["id"],
+            "question": question["question"],
+            "option1": question["option1"],
+            "option2": question["option2"],
+            "option3": question["option3"],
+            "option4": question["option4"],
+            "correct_answer": question["correct_answer"]
+        })
+    return results

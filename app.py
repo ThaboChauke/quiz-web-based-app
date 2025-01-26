@@ -3,7 +3,7 @@ from cs50 import SQL
 from redis import StrictRedis
 from dotenv import load_dotenv
 from flask_session import Session
-from helpers import login_required
+from helpers import login_required, json_data
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import Flask, render_template, request, redirect, flash, session
 
@@ -30,14 +30,20 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/quiz", methods=["POST", "GET"])
+@app.route("/quiz")
 @login_required
 def quiz():
-    if request.method == "POST":
-        return render_template("quiz.html")
 
-    else:
-        return render_template("quiz.html")
+    param = request.args.get('param')
+    if not param:
+        flash("No Quiz Was Chosen")
+        return redirect("/")
+    
+    results = db.execute("SELECT * FROM quizzes WHERE topic = ?", param)
+
+    serialized_data = json_data(results)
+
+    return render_template("quiz.html", data=serialized_data)
 
 
 @app.route("/login", methods = ["POST", "GET"])
