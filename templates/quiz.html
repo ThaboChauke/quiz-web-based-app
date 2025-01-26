@@ -1,0 +1,132 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Quiz
+{% endblock %}
+
+{% block main %}
+
+    <h1>Quiz</h1>
+
+    <div>
+        <div id="heads-up">
+            <div id="head-item">
+                <p id="progressText" class="head-prefix">
+                    Question
+                </p>
+                <div id="progressBar">
+                    <div id="progressBarFull"></div>
+                </div>
+            </div>
+            <div id="head-item">
+                <p class="head-prefix">
+                    Score
+                </p>
+                <h1 class="headMainText" id="score">
+                    0
+                </h1>
+            </div>
+        </div>
+        <h2 class="question" id="question">Question 1: What is this quiz about?</h2>
+        <div class="choice">
+            <p class="prefix">A</p>
+            <p class="choice-text" data-number="1">Option 1</p>
+        </div>
+        <div class="choice">
+            <p class="prefix">B</p>
+            <p class="choice-text" data-number="2">Option 2</p>
+        </div>
+        <div class="choice">
+            <p class="prefix">C</p>
+            <p class="choice-text" data-number="3">Option 3</p>
+        </div>
+        <div class="choice">
+            <p class="prefix">D</p>
+            <p class="choice-text" data-number="4">Option 4</p>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+
+        const questions = {{ data | tojson }}
+        const questionEl = document.getElementById("question")
+        const choicesEl = Array.from(document.getElementsByClassName("choice-text"))
+        const scoreEl = document.getElementById("score")
+        const progressTextEl = document.getElementById("progressText")
+        const progressBarFullEl = document.getElementById("progressBarFull")
+
+        let currentQuestion = {}
+        let isAnswer = true
+        let score = 0
+        let counter = 0 
+        let availableQuestions
+
+        const questionPoint = 10
+        const MAX_QUESTIONS = 10
+
+
+        startGame = () => {
+            counter = 0
+            score = 0
+            availableQuestions = [...questions]
+            getQuestion()
+        }
+
+        getQuestion = () => {
+
+            if (availableQuestions.length === 0 || counter === MAX_QUESTIONS) {
+               return window.location.href = "/"
+            }
+            counter++
+            progressTextEl.innerText = `Question ${counter}/${MAX_QUESTIONS}`
+            progressBarFullEl.style.width = `${(counter/MAX_QUESTIONS) * 100}%`
+
+            const index = Math.floor(Math.random() * availableQuestions.length)
+            currentQuestion = availableQuestions[index]
+            questionEl.innerText = currentQuestion.question
+
+            choicesEl.forEach(choice => {
+                const number = choice.dataset["number"];
+                choice.innerText = currentQuestion["option" + number];
+            });
+
+            availableQuestions.splice(index, 1)
+            isAnswer = true
+        }
+
+        startGame()  
+        
+        choicesEl.forEach(choice => {
+            choice.addEventListener("click", e => {
+
+                if (!isAnswer) return;
+
+                isAnswer = false
+                const userChoice = e.target
+                const userAnswer = userChoice.innerText
+
+                const addClass = userAnswer === currentQuestion.correct_answer ? "correct": "incorrect"
+
+                if (addClass === "correct") {
+                    updateScore(questionPoint)
+                }
+                
+                userChoice.parentElement.classList.add(addClass)
+
+                setTimeout( () => {
+                    userChoice.parentElement.classList.remove(addClass)
+                    getQuestion()
+                }, 2000)
+            })
+        });
+    
+        updateScore = num => {
+            score += num
+            scoreEl.innerText = score
+        }
+    
+    
+    </script>
+{% endblock %}

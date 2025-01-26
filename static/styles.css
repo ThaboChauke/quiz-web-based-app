@@ -14,11 +14,77 @@ nav .navbar-brand
     font-family: 'Times New Roman', Times, serif;
     font-weight: 500;
     font-size: xx-large;
-    color: blue;
+    color: #0000ff;
 }
 
 .indexImages {
     width: 200px;
     height: 200px;
   }
-  
+
+.question {
+    margin-bottom: 1rem;
+}
+
+.choice {
+    display: flex;
+    margin-bottom: 0.5rem;
+    width: 100%;
+    font-size: 1.8rem;
+    border: 0.1rem solid rgb(86, 165, 235, 0.25);
+    background-color: #fff;
+}
+
+.choice:hover {
+    cursor: pointer;
+    box-shadow: 0 0.4rem 0 rgba(86, 185, 235, 0.5);
+    transform: translateY(-0.1rem);
+    transition: transform 180ms;
+}
+
+.prefix {
+    padding: 1.5rem 2.5rem;
+    background-color: #0b55dd;
+    color: #fff;
+}
+
+.choice-text {
+    padding: 1.5rem;
+    width: 100%;
+}
+
+.correct {
+    background-color: #28a745;
+}
+
+.incorrect {
+    background-color: #dc3545;
+}
+
+#heads-up {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.head-prefix {
+    text-align: center;
+    /* font-size: 2rem; */
+}
+
+.headMainText {
+    text-align: center;
+}
+
+#progressBar {
+    width: 20rem;
+    height: 2.8rem;
+    border: 0.3rem solid #0b55dd;
+    margin-top: 1rem;
+}
+
+#progressBarFull {
+    height: 2.4rem;
+    background-color: #0b55dd;
+    width: 0%;
+}
