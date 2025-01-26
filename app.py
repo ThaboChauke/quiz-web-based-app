@@ -24,7 +24,7 @@ Session(app)
 db = SQL("sqlite:///quiz.db")
 
 
-@app.route("/")
+@app.route("/", methods = ["GET"])
 @login_required
 def index():
     return render_template("index.html")
@@ -44,6 +44,28 @@ def quiz():
     serialized_data = json_data(results)
 
     return render_template("quiz.html", data=serialized_data)
+
+
+@app.route("/score")
+def score():
+
+    param = request.args.get('param')
+    if not param:
+        flash("An error ocurred", category="error")
+        return redirect("/")
+    
+    user_id = session.get("user_id")
+
+    results = db.execute("SELECT username FROM users WHERE id = ?", user_id)
+    result = results[0]
+
+    if result:
+        username = result["username"]
+
+    data = dict(username = username, user_score = param)
+
+    return render_template("score.html", data=data)
+
 
 
 @app.route("/login", methods = ["POST", "GET"])

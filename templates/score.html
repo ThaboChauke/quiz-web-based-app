@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Score
+{% endblock %}
+
+{% block main %}
+
+    <div id="scorePage" class="flex-center flex-column">
+        <h1 id="finalScore">{{ data.user_score }}</h1>
+
+        <form method="post" id="scoreForm">
+            <input type="number" name="score" id="score" value="{{ data.user_score }}" hidden>
+            <input type="text" name="username" id="username" value="{{ data.username }}" disabled>
+            <button type="submit" class="btn btn-primary" id="saveBtn">Save</button>
+            <button type="submit" class="btn btn-primary" id="playBtn">Play</button>
+            <button type="submit" class="btn btn-primary" id="homeBtn">Go Home</button>
+
+        </form>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    <script>
+        document.getElementById('saveBtn').addEventListener('click', function () {
+            const form = document.getElementById('scoreForm')
+            form.action = '/score'
+            form.submit()
+        })
+          
+        document.getElementById('playBtn').addEventListener('click', function () {
+            const form = document.getElementById('scoreForm')
+            form.action = '/quiz'
+            form.submit()
+        })
+
+        document.getElementById('homeBtn').addEventListener('click', function () {
+            const form = document.getElementById('scoreForm')
+            form.method = 'GET'
+            form.action = '/'
+            form.submit()
+        })
+    </script>
+
+{% endblock %}

@@ -77,8 +77,9 @@
         getQuestion = () => {
 
             if (availableQuestions.length === 0 || counter === MAX_QUESTIONS) {
-               return window.location.href = "/"
+               return window.location.href = `/score?param=${score}`
             }
+            
             counter++
             progressTextEl.innerText = `Question ${counter}/${MAX_QUESTIONS}`
             progressBarFullEl.style.width = `${(counter/MAX_QUESTIONS) * 100}%`
