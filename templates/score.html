@@ -7,14 +7,16 @@
 {% block main %}
 
     <div id="scorePage" class="flex-center flex-column">
-        <h1 id="finalScore">{{ data.user_score }}</h1>
-
+        <h1 id="finalScore">
+            <span class="material-symbols-outlined">trophy</span>{{ data.user_score }}
+        </h1>
         <form method="post" id="scoreForm">
             <input type="number" name="score" id="score" value="{{ data.user_score }}" hidden>
             <input type="text" name="username" id="username" value="{{ data.username }}" disabled>
-            <button type="submit" class="btn btn-primary" id="saveBtn">Save</button>
-            <button type="submit" class="btn btn-primary" id="playBtn">Play</button>
-            <button type="submit" class="btn btn-primary" id="homeBtn">Go Home</button>
+            <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
+                <button type="submit" class="btn btn-primary" id="playBtn">Play Again</button>
+                <button type="submit" class="btn btn-primary" id="homeBtn">Go Home</button>
+            </div>
 
         </form>
     </div>
@@ -23,15 +25,9 @@
 
 {% block script %}
     <script>
-        document.getElementById('saveBtn').addEventListener('click', function () {
-            const form = document.getElementById('scoreForm')
-            form.action = '/score'
-            form.submit()
-        })
-          
         document.getElementById('playBtn').addEventListener('click', function () {
             const form = document.getElementById('scoreForm')
-            form.action = '/quiz'
+            form.action = `/quiz?param=${"{{ data.quiz_type }}"}`
             form.submit()
         })
 
