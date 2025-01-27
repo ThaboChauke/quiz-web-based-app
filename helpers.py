@@ -25,3 +25,15 @@ def json_data(db_results):
             "correct_answer": question["correct_answer"]
         })
     return results
+
+def history_data(data):
+    result = []
+
+    for quiz in data:
+        result.append({
+            "id": quiz["id"],
+            "type": quiz["quiz_type"],
+            "score": quiz["score"],
+        })
+
+    return result

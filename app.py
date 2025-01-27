@@ -3,7 +3,7 @@ from cs50 import SQL
 from redis import StrictRedis
 from dotenv import load_dotenv
 from flask_session import Session
-from helpers import login_required, json_data
+from helpers import login_required, json_data, history_data
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import Flask, render_template, request, redirect, flash, session
 
@@ -30,7 +30,7 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/quiz")
+@app.route("/quiz", methods=["POST", "GET"])
 @login_required
 def quiz():
 
@@ -43,29 +43,61 @@ def quiz():
 
     serialized_data = json_data(results)
 
-    return render_template("quiz.html", data=serialized_data)
+    return render_template("quiz.html", data=serialized_data, quiz_type=param)
 
 
 @app.route("/score")
 def score():
 
     param = request.args.get('param')
-    if not param:
+    quiz_type = request.args.get('type')
+
+    if not param or not quiz_type:
         flash("An error ocurred", category="error")
         return redirect("/")
     
     user_id = session.get("user_id")
 
-    results = db.execute("SELECT username FROM users WHERE id = ?", user_id)
-    result = results[0]
+    try :
+        results = db.execute("SELECT username FROM users WHERE id = ?", user_id)
+        db.execute(
+            "UPDATE users SET highscore = ? WHERE id = ? AND ? > highscore",
+            param, user_id, param)
+        
+        db.execute(
+            "UPDATE users SET overall_score = overall_score + ? WHERE id = ?",
+            param, user_id)
+                
+        db.execute(
+            "INSERT INTO history (user_id, quiz_type, score) VALUES (?, ?, ?)",
+            user_id, quiz_type, param)
 
-    if result:
-        username = result["username"]
+        result = results[0]
 
-    data = dict(username = username, user_score = param)
+        if result:
+            username = result["username"]
+
+    except:
+        flash("An Error Occured")
+        return redirect("/")
+
+    data = dict(username=username, user_score=param, quiz_type=quiz_type)
 
     return render_template("score.html", data=data)
 
+
+@app.route("/history")
+def history():
+    user_id = session.get("user_id")
+
+    data = db.execute("SELECT * FROM history WHERE user_id = ?", user_id)
+
+    if data == []:
+        return render_template("history.html")
+    
+    quzzes = history_data(data)
+
+    return render_template("history.html", data=quzzes)
 
 
 @app.route("/login", methods = ["POST", "GET"])
@@ -102,7 +134,6 @@ def login():
 
 @app.route("/logout")
 def logout():
-
     session.clear()
     flash("You have been logged out")
     return redirect("/")
@@ -129,7 +160,7 @@ def register():
             flash("Confirm Password is Required", category="error")
             return render_template("register.html")
 
-        if request.form.get("confirm") == request.form.get("password"):
+        if request.form.get("confirm") != request.form.get("password"):
             flash("Passwords Do Not Match", category="error")
             return render_template("register.html")
 
