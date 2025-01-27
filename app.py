@@ -24,7 +24,7 @@ Session(app)
 db = SQL("sqlite:///quiz.db")
 
 
-@app.route("/", methods = ["GET"])
+@app.route("/", methods=["GET"])
 @login_required
 def index():
     return render_template("index.html")
@@ -100,7 +100,34 @@ def history():
     return render_template("history.html", data=quzzes)
 
 
-@app.route("/login", methods = ["POST", "GET"])
+@app.route("/request", methods=["POST", "GET"])
+def request_quiz():
+
+    if request.method == "POST":
+        if not request.form.get("email"):
+            flash("Email is Required", category="error")
+            return render_template("feedback.html")
+
+        if not request.form.get("username"):
+            flash("Username is Required", category="error")
+            return render_template("feedback.html")
+
+        if not request.form.get("type"):
+            flash("Password is Required", category="error")
+            return render_template("feedback.html")
+
+        # if not request.form.get("confirm"):
+        #     flash("Confirm Password is Required", category="error")
+        #     return render_template("feedback.html")
+
+        flash("Request Sent Successfully")
+        return redirect("/")
+
+    else:
+        return render_template("feedback.html")
+
+
+@app.route("/login", methods=["POST", "GET"])
 def login():
     if request.method == "POST":
 
@@ -139,7 +166,7 @@ def logout():
     return redirect("/")
 
 
-@app.route("/register", methods = ["POST", "GET"])
+@app.route("/register", methods=["POST", "GET"])
 def register():
 
     if request.method == "POST":

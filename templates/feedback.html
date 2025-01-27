@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Request
+{% endblock %}
+
+{% block main %}
+    <div class="innerBox">
+        <p class="fs-1 text-center">Request A Quiz</p>
+
+        <form action="/request" method="post">
+            <div class="mb-3">
+                <input autofocus class="form-control mx-auto w-auto" name="username" placeholder="Username" type="text">
+            </div>
+            <div class="mb-3">
+                <input autofocus class="form-control mx-auto w-auto" name="email" placeholder="email@email.com" type="text">
+            </div>
+            <div class="mb-3">
+                <input autofocus class="form-control mx-auto w-auto" name="quiz" placeholder="e.g. Tech" type="text">
+            </div>
+            <div class="mb-3">
+                <textarea class="form-control mx-auto w-auto" id="textArea" rows="3" placeholder="Additional Information"></textarea>
+              </div>
+            <button class="btn btn-primary" type="submit">Request</button>
+        </form>
+    </div>
+
+{% endblock %}

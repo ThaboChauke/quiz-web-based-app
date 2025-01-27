@@ -17,6 +17,19 @@ nav .navbar-brand
     color: #0000ff;
 }
 
+.fs-2 {
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 400;
+    font-size: large;
+    color: #0000ff;
+}
+
+.fs-5 {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: large;
+    color: #0000ff;
+}
+
 .indexImages {
     width: 200px;
     height: 200px;
@@ -110,9 +123,9 @@ nav .navbar-brand
 }
 
 .material-symbols-outlined {
-  font-variation-settings:
-  'FILL' 0,
-  'wght' 400,
-  'GRAD' 0,
-  'opsz' 24
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24
 }
