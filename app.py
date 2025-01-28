@@ -1,7 +1,7 @@
 import os
 from cs50 import SQL
-from redis import StrictRedis
 from dotenv import load_dotenv
+from flask_sqlalchemy import SQLAlchemy
 from flask_session import Session
 from flask_mail import Mail, Message    
 from helpers import login_required, json_data, history_data
@@ -23,12 +23,12 @@ app.config['MAIL_USE_SSL'] = False
 
 mail = Mail(app)
 
-HOST = os.getenv("REDIS_HOST")
-PORT = os.getenv("REDIS_PORT")
-PASSWORD  = os.getenv("REDIS_PASSWORD")
-
 app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"
+app.config["SESSION_TYPE"] = "sqlalchemy"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///sessions.db"
+
+sdb = SQLAlchemy(app)
+app.config["SESSION_SQLALCHEMY"] = sdb
 Session(app)
 
 db = SQL("sqlite:///quiz.db")
