@@ -31,6 +31,9 @@ sdb = SQLAlchemy(app)
 app.config["SESSION_SQLALCHEMY"] = sdb
 Session(app)
 
+with app.app_context():
+    sdb.create_all()
+
 db = SQL("sqlite:///quiz.db")
 
 
@@ -125,10 +128,6 @@ def request_quiz():
         if not request.form.get("quiz"):
             flash("Type is Required", category="error")
             return render_template("feedback.html")
-
-        # if not request.form.get("confirm"):
-        #     flash("Confirm Password is Required", category="error")
-        #     return render_template("feedback.html")
 
         message = Message(
             subject="Request For Quiz",

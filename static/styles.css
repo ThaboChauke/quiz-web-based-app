@@ -1,8 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Jersey+15&family=Leckerli+One&display=swap');
 
 
-nav .navbar-brand
-{
+nav .navbar-brand {
     color: #0b55dd;
     font-family: "Leckerli One", 'Times New Roman', Times, serif;
     font-weight: 400;
@@ -82,7 +81,6 @@ nav .navbar-brand
 
 .head-prefix {
     text-align: center;
-    /* font-size: 2rem; */
 }
 
 .headMainText {
