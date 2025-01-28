@@ -3,6 +3,7 @@ from cs50 import SQL
 from redis import StrictRedis
 from dotenv import load_dotenv
 from flask_session import Session
+from flask_mail import Mail, Message    
 from helpers import login_required, json_data, history_data
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import Flask, render_template, request, redirect, flash, session
@@ -12,6 +13,15 @@ load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SESSION_KEY")
+
+app.config['MAIL_SERVER']='sandbox.smtp.mailtrap.io'
+app.config['MAIL_PORT'] = 2525
+app.config['MAIL_USERNAME'] = os.getenv("MAIL_USERNAME")
+app.config['MAIL_PASSWORD'] = os.getenv("MAIL_PWD")
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+
+mail = Mail(app)
 
 HOST = os.getenv("REDIS_HOST")
 PORT = os.getenv("REDIS_PORT")
@@ -112,13 +122,28 @@ def request_quiz():
             flash("Username is Required", category="error")
             return render_template("feedback.html")
 
-        if not request.form.get("type"):
-            flash("Password is Required", category="error")
+        if not request.form.get("quiz"):
+            flash("Type is Required", category="error")
             return render_template("feedback.html")
 
         # if not request.form.get("confirm"):
         #     flash("Confirm Password is Required", category="error")
         #     return render_template("feedback.html")
+
+        message = Message(
+            subject="Request For Quiz",
+            recipients=[os.getenv("MyEmail")],
+            sender=request.form.get("email")
+        )
+
+        message.body = f"""
+            {request.form.get("quiz")}
+
+            {request.form.get("Additional")}
+
+            from {request.form.get("username")}        
+        """
+        mail.send(message)
 
         flash("Request Sent Successfully")
         return redirect("/")
