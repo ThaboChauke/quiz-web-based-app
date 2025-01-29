@@ -66,5 +66,5 @@ This project utilized images from Unsplash. Gratitude to the respective photogra
 
 ## License
 
-This project is licensed under the MIT License. See the LICENSE file for details.
+This project is licensed under the MIT License. See the [LICENSE](/LICENSE) file for details.
 
