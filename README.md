@@ -32,17 +32,11 @@ This is a dynamic, interactive, and web-based quiz application built with Flask.
    ```bash
    pip install -r requirements.txt
    ```
-4. Set up the database:
-   ```bash
-   flask shell
-   >>> from app import db
-   >>> db.create_all()
-   ```
-5. Run the application:
+4. Run the application:
    ```bash
    flask run
    ```
-6. Access the application at `http://127.0.0.1:5000`.
+5. Access the application at `http://127.0.0.1:5000`.
 
 ## Usage
 
